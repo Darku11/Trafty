@@ -521,6 +521,12 @@ public partial class MainWindow : Window
 
     private void OnStopSoundClick(object? sender, RoutedEventArgs e) => WavPlayer.Stop();
 
+    private void OnCloseSoundClick(object? sender, RoutedEventArgs e)
+    {
+        WavPlayer.Stop();
+        _viewModel.CloseSound();
+    }
+
     private async void OnAboutClick(object? sender, RoutedEventArgs e) => await new AboutWindow().ShowDialog(this);
 
     private void OnBackupNowClick(object? sender, RoutedEventArgs e)

@@ -679,8 +679,19 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     public string? SoundPath => _soundPath;
 
+    /// <summary>Hides the sound player panel (playback itself is stopped by the caller — see Views).</summary>
+    public void CloseSound()
+    {
+        _soundPath = null;
+        SoundName = null;
+        SoundInfo = null;
+        OnPropertyChanged(nameof(HasSound));
+    }
+
     private Bitmap? _uiWindowPreviewImage;
     private string? _uiWindowName;
+    private DaocWindowTemplate? _uiWindowTemplate;
+    private UiControlRow? _selectedUiControl;
 
     /// <summary>Schematic layout render of the last opened UI window XML (see DaocWindowRenderer).</summary>
     public Bitmap? UiWindowPreviewImage
@@ -696,6 +707,19 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
 
     public ObservableCollection<UiControlRow> UiWindowControls { get; } = new();
+
+    /// <summary>Selecting a control in the list re-renders the preview with that control outlined in gold.</summary>
+    public UiControlRow? SelectedUiControl
+    {
+        get => _selectedUiControl;
+        set
+        {
+            if (SetField(ref _selectedUiControl, value))
+            {
+                RenderUiWindowPreview(value?.Index ?? -1);
+            }
+        }
+    }
 
     /// <summary>
     /// Loads a client UI XML file (Modul D) and renders the first WindowTemplate it defines.
@@ -713,24 +737,37 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
 
         DaocWindowTemplate window = ui.Windows[0];
-
-        using var pngStream = new MemoryStream();
-        DaocWindowRenderer.SaveAsPng(window, pngStream);
-        pngStream.Position = 0;
-
-        UiWindowPreviewImage?.Dispose();
-        UiWindowPreviewImage = new Bitmap(pngStream);
+        _uiWindowTemplate = window;
         UiWindowName = window.Name;
 
         UiWindowControls.Clear();
 
-        foreach (DaocControlDef control in window.Controls)
+        for (int i = 0; i < window.Controls.Count; i++)
         {
-            UiWindowControls.Add(UiControlRow.FromControl(control));
+            UiWindowControls.Add(UiControlRow.FromControl(i, window.Controls[i]));
         }
+
+        _selectedUiControl = null;
+        OnPropertyChanged(nameof(SelectedUiControl));
+        RenderUiWindowPreview(-1);
 
         string extra = ui.Windows.Count > 1 ? $" ({ui.Windows.Count - 1} more window(s) in this file not shown)" : "";
         StatusText = $"Loaded UI window \"{window.Name}\" ({window.Width}x{window.Height}, {window.Controls.Count} controls){extra}.";
+    }
+
+    private void RenderUiWindowPreview(int highlightIndex)
+    {
+        if (_uiWindowTemplate is null)
+        {
+            return;
+        }
+
+        using var pngStream = new MemoryStream();
+        DaocWindowRenderer.SaveAsPng(_uiWindowTemplate, pngStream, highlightIndex);
+        pngStream.Position = 0;
+
+        UiWindowPreviewImage?.Dispose();
+        UiWindowPreviewImage = new Bitmap(pngStream);
     }
 
     private void RenderColorTable(SystemColFile col)

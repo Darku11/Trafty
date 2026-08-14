@@ -27,7 +27,13 @@ public static class DaocWindowRenderer
         new(200, 190, 90, 200),
     };
 
-    public static Image<Rgba32> Render(DaocWindowTemplate window, int padding = 12)
+    /// <summary>
+    /// Renders the layout. When <paramref name="highlightIndex"/> matches a control's
+    /// position in <see cref="DaocWindowTemplate.Controls"/> (e.g. the one selected in the
+    /// App's control list), that control gets a thick gold outline drawn on top of
+    /// everything else so it's easy to spot in a busy window.
+    /// </summary>
+    public static Image<Rgba32> Render(DaocWindowTemplate window, int padding = 12, int highlightIndex = -1)
     {
         int canvasWidth = window.Width + padding * 2;
         int canvasHeight = window.Height + padding * 2;
@@ -44,8 +50,11 @@ public static class DaocWindowRenderer
             DrawText(image, font, window.Name, padding + 4, padding + window.TitleHeight / 2, Rgba32.ParseHex("#F0F0F0"), verticalCenter: true);
         }
 
-        foreach (DaocControlDef control in window.Controls)
+        (int X, int Y, int W, int H)? highlightRect = null;
+
+        for (int i = 0; i < window.Controls.Count; i++)
         {
+            DaocControlDef control = window.Controls[i];
             int x = padding + (control.X ?? 0);
             int y = padding + (control.Y ?? 0);
             Rgba32 color = KindPalette[Math.Abs(control.Kind.GetHashCode()) % KindPalette.Length];
@@ -60,6 +69,11 @@ public static class DaocWindowRenderer
                 {
                     DrawText(image, font, label, x + 3, y + h / 2, Rgba32.ParseHex("#101010"), verticalCenter: true);
                 }
+
+                if (i == highlightIndex)
+                {
+                    highlightRect = (x, y, w, h);
+                }
             }
             else
             {
@@ -73,10 +87,22 @@ public static class DaocWindowRenderer
                 {
                     DrawText(image, font, label, x + markerSize, y - 5, Rgba32.ParseHex("#E0E0E0"), verticalCenter: false);
                 }
+
+                if (i == highlightIndex)
+                {
+                    const int haloSize = 14;
+                    highlightRect = (x - haloSize / 2, y - haloSize / 2, haloSize, haloSize);
+                }
             }
         }
 
         DrawRect(image, padding, padding, window.Width, window.Height, new Rgba32(180, 180, 180, 255), filled: false);
+
+        if (highlightRect is { } h2)
+        {
+            DrawRect(image, h2.X - 2, h2.Y - 2, h2.W + 4, h2.H + 4, new Rgba32(201, 162, 74, 255), filled: false);
+            DrawRect(image, h2.X - 3, h2.Y - 3, h2.W + 6, h2.H + 6, new Rgba32(201, 162, 74, 255), filled: false);
+        }
 
         return image;
     }
@@ -114,9 +140,9 @@ public static class DaocWindowRenderer
         image.Mutate(ctx => ctx.DrawText(text, font, color, origin));
     }
 
-    public static void SaveAsPng(DaocWindowTemplate window, Stream destination)
+    public static void SaveAsPng(DaocWindowTemplate window, Stream destination, int highlightIndex = -1)
     {
-        using Image<Rgba32> image = Render(window);
+        using Image<Rgba32> image = Render(window, highlightIndex: highlightIndex);
         image.SaveAsPng(destination);
     }
 
