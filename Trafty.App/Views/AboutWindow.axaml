@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Trafty.App.Views.AboutWindow"
+        Title="About Trafty"
+        Width="440" SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource TraftyBgDeepest}">
+
+  <StackPanel Margin="28" Spacing="14">
+    <TextBlock Text="TRAFTY" FontSize="28" FontWeight="Bold" LetterSpacing="6"
+               Foreground="{StaticResource TraftyGold}" />
+    <TextBlock Text="Trafty 1.0 Alpha 1" FontSize="14" FontWeight="SemiBold" />
+    <TextBlock Text="Developed by Aldhran" FontSize="13" Opacity="0.8" />
+
+    <StackPanel Orientation="Horizontal" Spacing="6">
+      <TextBlock Text="Support &amp; Feedback:" FontSize="13" Opacity="0.8" />
+      <TextBlock Text="https://www.aldhran-server.eu" FontSize="13"
+                 Foreground="{StaticResource TraftyGold}" />
+    </StackPanel>
+
+    <Border Background="{StaticResource TraftyBgPanel}"
+            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1"
+            CornerRadius="4" Padding="14" Margin="0,8,0,0">
+      <TextBlock TextWrapping="Wrap" FontSize="12" Opacity="0.75"
+                 Text="Client modding may violate EA's terms of service. Use at your own risk." />
+    </Border>
+
+    <Button Content="Close" Click="OnCloseClick" HorizontalAlignment="Right" Margin="0,8,0,0" />
+  </StackPanel>
+
+</Window>

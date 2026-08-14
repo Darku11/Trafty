@@ -1,0 +1,88 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Trafty.App.App"
+             RequestedThemeVariant="Dark">
+  <Application.Styles>
+    <FluentTheme />
+  </Application.Styles>
+
+  <Application.Resources>
+    <SolidColorBrush x:Key="TraftyBgDeepest">#0A0A0E</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgPanel">#131319</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgCard">#1A1A22</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgCardHover">#22222C</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBorder">#2C2C38</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGold">#C9A24A</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGoldBright">#E4C374</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGoldDim">#8A7238</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyTextPrimary">#EDE8DC</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyTextMuted">#8F8A7E</SolidColorBrush>
+  </Application.Resources>
+
+  <Application.Styles>
+    <Style Selector="Window">
+      <Setter Property="Background" Value="{StaticResource TraftyBgDeepest}" />
+      <Setter Property="FontFamily" Value="Inter" />
+    </Style>
+
+    <Style Selector="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
+    </Style>
+
+    <Style Selector="Button">
+      <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="4" />
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource TraftyBgCardHover}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyGold}" />
+      <Setter Property="TextBlock.Foreground" Value="{StaticResource TraftyGoldBright}" />
+    </Style>
+    <Style Selector="Button:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource TraftyBgPanel}" />
+    </Style>
+
+    <Style Selector="TabControl">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="TabItem">
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextMuted}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TabItem:selected /template/ ContentPresenter">
+      <Setter Property="TextBlock.Foreground" Value="{StaticResource TraftyGold}" />
+    </Style>
+
+    <Style Selector="ListBox">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBoxItem">
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Margin" Value="0,1" />
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource TraftyBgCardHover}" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
+    </Style>
+
+    <Style Selector="CheckBox">
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
+    </Style>
+
+    <Style Selector="NumericUpDown">
+      <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+    </Style>
+
+    <Style Selector="ScrollBar">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+  </Application.Styles>
+</Application>
