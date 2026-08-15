@@ -40,7 +40,7 @@ public partial class MainWindow
 
     private void OnWorkspaceTabChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is not TabControl tabs)
+        if (!_guideBindingsAttached || sender is not TabControl tabs)
         {
             return;
         }
