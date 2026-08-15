@@ -221,7 +221,7 @@ public sealed class ClientExplorerViewModel : INotifyPropertyChanged
         return new PreviewResult(null, "Preview is not implemented for this texture format yet.");
     }
 
-    private static byte[] ReadAssetBytes(ClientAssetRow asset)
+    internal static byte[] ReadAssetBytes(ClientAssetRow asset)
     {
         if (!asset.IsArchived)
         {

@@ -1,5 +1,10 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Media.Imaging;
+using Trafty.App.Services;
 using Trafty.App.ViewModels;
+using Trafty.Core.Archives;
 using Trafty.Core.Client;
 
 namespace Trafty.App.Views;
@@ -7,6 +12,7 @@ namespace Trafty.App.Views;
 public partial class ClientExplorerWindow : Window
 {
     private readonly ClientExplorerViewModel _viewModel = new();
+    private readonly AssetPreviewPopupController _previewPopup;
     private readonly string? _rootPath;
     private bool _scanStarted;
 
@@ -21,6 +27,55 @@ public partial class ClientExplorerWindow : Window
         {
             assetList.SelectionChanged += async (_, _) => await _viewModel.InspectSelectedAssetAsync();
         }
+
+        _previewPopup = new AssetPreviewPopupController(
+            this.FindControl<Popup>("AssetPreviewPopupSmall")!,
+            this.FindControl<Image>("AssetPreviewImageSmall")!,
+            this.FindControl<Popup>("AssetPreviewPopupLarge")!,
+            this.FindControl<Image>("AssetPreviewImageLarge")!,
+            this.FindControl<TextBlock>("AssetPreviewInfoLarge"));
+    }
+
+    /// <summary>
+    /// Right-click on an asset opens a small thumbnail preview near the cursor; hovering
+    /// over it (handled by <see cref="AssetPreviewPopupController"/>) swaps to a larger
+    /// popup. Reads and renders off the UI thread since archive-contained NIF/DDS entries
+    /// can be large.
+    /// </summary>
+    private async void OnAssetContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not Control { DataContext: ClientAssetRow row })
+        {
+            return;
+        }
+
+        e.Handled = true;
+
+        if (!AssetPreviewRenderer.IsPreviewable(Path.GetExtension(row.Name)))
+        {
+            return;
+        }
+
+        byte[]? png = await Task.Run(() =>
+        {
+            try
+            {
+                byte[] bytes = ClientExplorerViewModel.ReadAssetBytes(row);
+                return AssetPreviewRenderer.TryRenderPng(bytes, Path.GetExtension(row.Name));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or MpkFormatException)
+            {
+                return null;
+            }
+        });
+
+        if (png is null)
+        {
+            return;
+        }
+
+        using var stream = new MemoryStream(png, writable: false);
+        _previewPopup.ShowSmall(new Bitmap(stream), row.Name);
     }
 
     public ClientExplorerWindow(string rootPath) : this()

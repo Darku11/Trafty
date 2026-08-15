@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Trafty.App.Services;
 using Trafty.App.ViewModels;
@@ -20,6 +22,7 @@ namespace Trafty.App.Views;
 public partial class MainWindow : Window
 {
     private readonly MainWindowViewModel _viewModel = new();
+    private readonly AssetPreviewPopupController _previewPopup;
 
     public MainWindow()
     {
@@ -37,7 +40,74 @@ public partial class MainWindow : Window
         var dropZone = this.FindControl<Border>("DropZone")!;
         dropZone.AddHandler(DragDrop.DropEvent, OnDropZoneDrop);
         dropZone.AddHandler(DragDrop.DragOverEvent, OnDropZoneDragOver);
+
+        _previewPopup = new AssetPreviewPopupController(
+            this.FindControl<Popup>("AssetPreviewPopupSmall")!,
+            this.FindControl<Image>("AssetPreviewImageSmall")!,
+            this.FindControl<Popup>("AssetPreviewPopupLarge")!,
+            this.FindControl<Image>("AssetPreviewImageLarge")!);
     }
+
+    /// <summary>
+    /// Right-click on an asset row opens a small thumbnail preview near the cursor; hovering
+    /// over that thumbnail (handled by <see cref="AssetPreviewPopupController"/>) swaps to a
+    /// larger popup. DDS entries already have a decoded <see cref="AssetRow.Thumbnail"/> from
+    /// the archive load, so those show instantly — everything else (TGA, NIF) is rendered
+    /// off the UI thread on demand.
+    /// </summary>
+    private async void OnAssetContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (sender is not Control { DataContext: AssetRow row } || ArchivePath is null)
+        {
+            return;
+        }
+
+        e.Handled = true;
+
+        if (row.Thumbnail is not null)
+        {
+            _previewPopup.ShowSmall(row.Thumbnail, row.Name);
+            return;
+        }
+
+        if (!AssetPreviewRenderer.IsPreviewable(row.Extension))
+        {
+            return;
+        }
+
+        string archivePath = ArchivePath;
+
+        byte[]? png = await Task.Run(() =>
+        {
+            try
+            {
+                using MpkArchive archive = MpkArchive.Open(archivePath);
+                MpkEntry? entry = archive[row.Name];
+
+                if (entry is null)
+                {
+                    return null;
+                }
+
+                byte[] bytes = archive.Extract(entry);
+                return AssetPreviewRenderer.TryRenderPng(bytes, row.Extension);
+            }
+            catch (Exception ex) when (ex is IOException or MpkFormatException)
+            {
+                return null;
+            }
+        });
+
+        if (png is null)
+        {
+            return;
+        }
+
+        using var stream = new MemoryStream(png, writable: false);
+        _previewPopup.ShowSmall(new Bitmap(stream), row.Name);
+    }
+
+    private string? ArchivePath => _viewModel.ArchivePath;
 
     private async void OnRestoreBackupClick(object? sender, RoutedEventArgs e)
     {
