@@ -11,28 +11,28 @@
   <Grid RowDefinitions="Auto,Auto,*,Auto">
     <Border Grid.Row="0" Padding="22,16" Background="{StaticResource TraftyBgPanel}"
             BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="0,0,0,1">
-      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+      <Grid ColumnDefinitions="*,Auto">
         <StackPanel Grid.Column="0" Spacing="3">
           <TextBlock Text="CLIENT EXPLORER" FontSize="22" FontWeight="Bold" LetterSpacing="4"
                      Foreground="{StaticResource TraftyGoldBright}" />
           <TextBlock Text="Turn the client into a searchable asset library."
                      Foreground="{StaticResource TraftyTextMuted}" FontSize="12" />
         </StackPanel>
-        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+        <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">
           <TextBlock Text="SCAN TARGET" Classes="kicker" HorizontalAlignment="Right" />
           <TextBlock Text="{Binding RootDisplayName}" Foreground="{StaticResource TraftyGold}" FontWeight="SemiBold" />
         </StackPanel>
       </Grid>
     </Border>
 
-    <Grid Grid.Row="1" ColumnDefinitions="*,220" Margin="12" ColumnSpacing="8">
-      <TextBox Grid.Column="0" Watermark="Search models, houses, trees, archives, textures…"
+    <Grid Grid.Row="1" ColumnDefinitions="*,220" Margin="12">
+      <TextBox Grid.Column="0" Margin="0,0,8,0" Watermark="Search models, houses, trees, archives, textures…"
                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
       <ComboBox Grid.Column="1" ItemsSource="{Binding KindFilters}" SelectedItem="{Binding SelectedKind}" />
     </Grid>
 
-    <Grid Grid.Row="2" ColumnDefinitions="2.2*,0.95*" Margin="12,0,12,10" ColumnSpacing="10">
-      <Border Grid.Column="0" Classes="workbench" Padding="6">
+    <Grid Grid.Row="2" ColumnDefinitions="2.2*,0.95*" Margin="12,0,12,10">
+      <Border Grid.Column="0" Margin="0,0,10,0" Classes="workbench" Padding="6">
         <Grid RowDefinitions="Auto,*">
           <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8,6,8,8">
             <StackPanel Grid.Column="0" Spacing="2">
@@ -67,13 +67,13 @@
                   BorderBrush="#7D9A78" BorderThickness="1" CornerRadius="7">
             <StackPanel Spacing="9">
               <TextBlock Text="ARCHIVE GUIDE" Classes="kicker" />
-              <Grid ColumnDefinitions="64,*" ColumnSpacing="10">
+              <Grid ColumnDefinitions="64,*">
                 <Border Grid.Column="0" Width="58" Height="58" CornerRadius="29"
                         Background="{StaticResource TraftyBgDeepest}" BorderBrush="#7D9A78" BorderThickness="2">
                   <TextBlock Text="A" FontSize="23" FontWeight="Bold" Foreground="{StaticResource TraftyGoldBright}"
                              HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
                   <TextBlock Text="Aelwyn" Classes="sectionTitle" />
                   <TextBlock Text="Elven Archivist" Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
                 </StackPanel>
@@ -119,9 +119,9 @@
 
     <Border Grid.Row="3" Padding="13,8" Background="{StaticResource TraftyBgPanel}"
             BorderBrush="{StaticResource TraftyBorder}" BorderThickness="0,1,0,0">
-      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+      <Grid ColumnDefinitions="Auto,*">
         <TextBlock Grid.Column="0" Text="INDEX LOG" Classes="kicker" VerticalAlignment="Center" />
-        <TextBlock Grid.Column="1" Text="{Binding SummaryText}" FontSize="12" Foreground="{StaticResource TraftyTextMuted}" />
+        <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding SummaryText}" FontSize="12" Foreground="{StaticResource TraftyTextMuted}" />
       </Grid>
     </Border>
   </Grid>

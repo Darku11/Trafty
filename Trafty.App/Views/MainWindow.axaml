@@ -12,7 +12,7 @@
 
     <Border Grid.Row="0" Padding="26,18" Background="{StaticResource TraftyBgPanel}"
             BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="0,0,0,1">
-      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+      <Grid ColumnDefinitions="*,Auto">
         <StackPanel Grid.Column="0" Spacing="3">
           <TextBlock Text="TRAFTY" FontSize="29" FontWeight="Bold" LetterSpacing="7"
                      Foreground="{StaticResource TraftyGoldBright}" />
@@ -21,7 +21,7 @@
                      FontSize="12" Foreground="{StaticResource TraftyTextMuted}" Margin="0,3,0,0" />
         </StackPanel>
 
-        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="5">
+        <StackPanel Grid.Column="1" Margin="20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="5">
           <TextBlock Text="ACTIVE ARCHIVE" Classes="kicker" HorizontalAlignment="Right" />
           <TextBlock Text="{Binding ArchiveDisplayName}" Foreground="{StaticResource TraftyGold}"
                      FontWeight="SemiBold" HorizontalAlignment="Right" />
@@ -85,8 +85,8 @@
       </WrapPanel>
     </Border>
 
-    <Grid Grid.Row="2" ColumnDefinitions="2.35*,0.95*" Margin="10" ColumnSpacing="10">
-      <Border Grid.Column="0" Classes="workbench" Padding="8">
+    <Grid Grid.Row="2" ColumnDefinitions="2.35*,0.95*" Margin="10">
+      <Border Grid.Column="0" Margin="0,0,10,0" Classes="workbench" Padding="8">
         <TabControl x:Name="WorkspaceTabs" SelectionChanged="OnWorkspaceTabChanged">
           <TabItem Header="Archive Assets">
             <DockPanel Margin="4">
@@ -210,8 +210,8 @@
                 <TextBlock Text="Inspect WindowTemplate structure and client control placement."
                            Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
               </StackPanel>
-              <Grid Grid.Row="1" ColumnDefinitions="2*,1*" ColumnSpacing="8">
-                <Border Grid.Column="0" Background="{StaticResource TraftyBgDeepest}" Padding="8"
+              <Grid Grid.Row="1" ColumnDefinitions="2*,1*">
+                <Border Grid.Column="0" Margin="0,0,8,0" Background="{StaticResource TraftyBgDeepest}" Padding="8"
                         BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5">
                   <Image Source="{Binding UiWindowPreviewImage}" Stretch="Uniform" />
                 </Border>
@@ -239,7 +239,7 @@
                   BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="1" CornerRadius="7">
             <StackPanel Spacing="10">
               <TextBlock Text="WORKSHOP GUIDE" Classes="kicker" />
-              <Grid ColumnDefinitions="78,*" ColumnSpacing="12">
+              <Grid ColumnDefinitions="78,*">
                 <Border x:Name="GuidePortraitRing" Grid.Column="0" Width="70" Height="70" CornerRadius="35"
                         Background="{StaticResource TraftyBgDeepest}" BorderBrush="{StaticResource TraftyGoldDim}"
                         BorderThickness="2" VerticalAlignment="Top">
@@ -247,7 +247,7 @@
                              Foreground="{StaticResource TraftyGoldBright}"
                              HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
-                <StackPanel Grid.Column="1" Spacing="2">
+                <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="2">
                   <TextBlock x:Name="GuideName" Text="Aelwyn" FontSize="19" FontWeight="Bold"
                              Foreground="{StaticResource TraftyGoldBright}" />
                   <TextBlock x:Name="GuideRole" Text="Elven Archivist" Foreground="{StaticResource TraftyTextMuted}" />
@@ -384,9 +384,9 @@
 
     <Border Grid.Row="3" Padding="14,8" Background="{StaticResource TraftyBgPanel}"
             BorderBrush="{StaticResource TraftyBorder}" BorderThickness="0,1,0,0">
-      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+      <Grid ColumnDefinitions="Auto,*">
         <TextBlock Grid.Column="0" Text="FORGE LOG" Classes="kicker" VerticalAlignment="Center" />
-        <TextBlock Grid.Column="1" Text="{Binding StatusText}" Foreground="{StaticResource TraftyTextMuted}"
+        <TextBlock Grid.Column="1" Margin="12,0,0,0" Text="{Binding StatusText}" Foreground="{StaticResource TraftyTextMuted}"
                    FontSize="12" TextTrimming="CharacterEllipsis" />
       </Grid>
     </Border>
