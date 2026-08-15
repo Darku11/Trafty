@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Trafty.App.ViewModels"
+        x:Class="Trafty.App.Views.ChangelogWindow"
+        Title="Trafty — Changelog"
+        Width="520" Height="480"
+        MinWidth="380" MinHeight="300"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource TraftyBgDeepest}">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+    <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,12">
+      <TextBlock Text="CHANGELOG" Classes="kicker" />
+      <TextBlock Text="Latest commits from github.com/Darku11/Trafty" FontSize="12"
+                 Foreground="{StaticResource TraftyTextMuted}" />
+    </StackPanel>
+
+    <Grid Grid.Row="1">
+      <ScrollViewer x:Name="ChangelogScroll" VerticalScrollBarVisibility="Auto">
+        <ItemsControl x:Name="ChangelogList">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:ChangelogRow">
+              <Border Background="{StaticResource TraftyBgPanel}" BorderBrush="{StaticResource TraftyBorder}"
+                      BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,6">
+                <StackPanel Spacing="2">
+                  <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{Binding ShortSha}" FontFamily="Consolas,monospace" FontSize="11"
+                               Foreground="{StaticResource TraftyGold}" />
+                    <TextBlock Text="{Binding DateDisplay}" FontSize="11"
+                               Foreground="{StaticResource TraftyTextMuted}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+
+      <TextBlock x:Name="StatusText" Text="Loading…" IsVisible="False"
+                 HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                 MaxWidth="380" Foreground="{StaticResource TraftyTextMuted}" />
+    </Grid>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right" Margin="0,12,0,0">
+      <Button Content="Refresh" Click="OnRefreshClick" />
+      <Button Content="Close" Click="OnCloseClick" />
+    </StackPanel>
+  </Grid>
+
+</Window>

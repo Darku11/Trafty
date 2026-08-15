@@ -11,4 +11,6 @@ public partial class AboutWindow : Window
     }
 
     private void OnCloseClick(object? sender, RoutedEventArgs e) => Close();
+
+    private async void OnChangelogClick(object? sender, RoutedEventArgs e) => await new ChangelogWindow().ShowDialog(this);
 }
