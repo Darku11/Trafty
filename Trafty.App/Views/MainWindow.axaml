@@ -4,324 +4,392 @@
         x:Class="Trafty.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Trafty — DAoC Client Asset Suite"
-        Width="1100" Height="700"
-        MinWidth="800" MinHeight="500">
+        Width="1240" Height="790"
+        MinWidth="900" MinHeight="600"
+        Loaded="OnGuideSystemLoaded">
 
   <Grid RowDefinitions="Auto,Auto,*,Auto">
 
-    <!-- Header banner -->
-    <Border Grid.Row="0" Padding="24,18" Background="{StaticResource TraftyBgPanel}"
-            BorderBrush="{StaticResource TraftyGold}" BorderThickness="0,0,0,1">
-      <Grid ColumnDefinitions="*,Auto">
-        <StackPanel Grid.Column="0" Spacing="2">
-          <TextBlock Text="TRAFTY" FontSize="26" FontWeight="Bold" LetterSpacing="6"
-                     Foreground="{StaticResource TraftyGold}" />
-          <TextBlock Text="DAoC Client Asset Suite" FontSize="12" Opacity="0.6" />
+    <Border Grid.Row="0" Padding="26,18" Background="{StaticResource TraftyBgPanel}"
+            BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+        <StackPanel Grid.Column="0" Spacing="3">
+          <TextBlock Text="TRAFTY" FontSize="29" FontWeight="Bold" LetterSpacing="7"
+                     Foreground="{StaticResource TraftyGoldBright}" />
+          <TextBlock Text="DAoC CLIENT ASSET FORGE" Classes="kicker" />
+          <TextBlock Text="Forge worlds. Decode archives. Build the impossible."
+                     FontSize="12" Foreground="{StaticResource TraftyTextMuted}" Margin="0,3,0,0" />
         </StackPanel>
-        <Button Grid.Column="1" Content="About" Click="OnAboutClick" VerticalAlignment="Center" />
+
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="5">
+          <TextBlock Text="ACTIVE ARCHIVE" Classes="kicker" HorizontalAlignment="Right" />
+          <TextBlock Text="{Binding ArchiveDisplayName}" Foreground="{StaticResource TraftyGold}"
+                     FontWeight="SemiBold" HorizontalAlignment="Right" />
+          <Button Content="About Trafty" Click="OnAboutClick" HorizontalAlignment="Right" Padding="10,5" />
+        </StackPanel>
       </Grid>
     </Border>
 
-    <!-- Toolbar -->
-    <Border Grid.Row="1" Padding="16,10" Background="{StaticResource TraftyBgDeepest}">
+    <Border Grid.Row="1" Padding="12,10,12,2" Background="{StaticResource TraftyBgDeepest}"
+            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="0,0,0,1">
       <WrapPanel>
-        <Button Content="Open Archive…" Click="OnOpenArchiveClick" Margin="0,0,8,8" />
-        <Button Content="Open Color Table…" Click="OnOpenColorTableClick" Margin="0,0,8,8" />
-        <Button Content="Open World Props Folder…" Click="OnOpenWorldPropsFolderClick" Margin="0,0,8,8" />
-        <Button Content="Open Zone Map…" Click="OnOpenZoneMapClick" Margin="0,0,8,8" />
-        <Button Content="Open UI Window…" Click="OnOpenUiWindowClick" Margin="0,0,8,8" />
-        <Button Content="Open Sound…" Click="OnOpenSoundClick" Margin="0,0,8,8" />
-        <Button Content="Open Texture…" Click="OnOpenTextureClick" Margin="0,0,8,8" />
-        <Button Content="Add Files…" Click="OnAddFilesClick" IsEnabled="{Binding HasArchive}" Margin="0,0,8,8" />
-        <Button Content="Backup Now" Click="OnBackupNowClick" IsEnabled="{Binding HasArchive}" Margin="0,0,8,8" />
-        <Button Content="Extract All…" Click="OnExtractAllClick" IsEnabled="{Binding HasArchive}" Margin="0,0,8,8" />
-        <Button Content="Extract All Archives…" Click="OnExtractAllArchivesClick" Margin="0,0,8,8" />
-        <TextBlock Text="{Binding ArchiveDisplayName}"
-                   VerticalAlignment="Center"
-                   Foreground="{StaticResource TraftyGold}"
-                   FontWeight="SemiBold" Margin="8,0,0,8" />
+        <Border Classes="toolbarGroup">
+          <StackPanel Spacing="6">
+            <TextBlock Text="CLIENT &amp; ARCHIVES" Classes="kicker" />
+            <WrapPanel>
+              <Button x:Name="ScanClientButton" Classes="primary" Content="Scan Client…"
+                      Click="OnScanClientClick" Margin="0,0,6,0" />
+              <Button x:Name="NewArchiveButton" Content="New Archive…"
+                      Click="OnNewArchiveClick" Margin="0,0,6,0" />
+              <Button x:Name="OpenArchiveButton" Content="Open Archive…"
+                      Click="OnOpenArchiveClick" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="toolbarGroup">
+          <StackPanel Spacing="6">
+            <TextBlock Text="ASSET FORGE" Classes="kicker" />
+            <WrapPanel>
+              <Button x:Name="OpenTextureButton" Content="Texture…" Click="OnOpenTextureClick" Margin="0,0,6,0" />
+              <Button x:Name="OpenWorldPropsButton" Content="World Props…" Click="OnOpenWorldPropsFolderClick" Margin="0,0,6,0" />
+              <Button x:Name="OpenUiButton" Content="UI Window…" Click="OnOpenUiWindowClick" Margin="0,0,6,0" />
+              <Button x:Name="OpenSoundButton" Content="Sound…" Click="OnOpenSoundClick" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="toolbarGroup">
+          <StackPanel Spacing="6">
+            <TextBlock Text="WORLD WORKSHOP" Classes="kicker" />
+            <WrapPanel>
+              <Button x:Name="OpenZoneButton" Classes="primary" Content="Zone Map…"
+                      Click="OnOpenZoneMapClick" Margin="0,0,6,0" />
+              <Button x:Name="OpenColorTableButton" Content="Atmosphere…"
+                      Click="OnOpenColorTableClick" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="toolbarGroup">
+          <StackPanel Spacing="6">
+            <TextBlock Text="ARCHIVE OPERATIONS" Classes="kicker" />
+            <WrapPanel>
+              <Button Content="Add Files…" Click="OnAddFilesClick" IsEnabled="{Binding HasArchive}" Margin="0,0,6,0" />
+              <Button Content="Backup" Click="OnBackupNowClick" IsEnabled="{Binding HasArchive}" Margin="0,0,6,0" />
+              <Button Content="Extract All…" Click="OnExtractAllClick" IsEnabled="{Binding HasArchive}" Margin="0,0,6,0" />
+              <Button Content="Mass Extract…" Click="OnExtractAllArchivesClick" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
       </WrapPanel>
     </Border>
 
-    <!-- Content: asset list + details/drop zone -->
-    <Grid Grid.Row="2" ColumnDefinitions="2*,1*" Margin="0">
-
-      <TabControl Grid.Column="0" Margin="8">
-        <TabItem Header="Archive Assets">
-          <DockPanel>
-            <CheckBox DockPanel.Dock="Top" Content="Grid view (texture thumbnails)"
-                      IsChecked="{Binding IsGridView}" Margin="4" />
-
-            <!-- Asset list -->
-            <ListBox x:Name="AssetList"
-                     IsVisible="{Binding !IsGridView}"
-                     ItemsSource="{Binding Entries}"
-                     SelectedItem="{Binding SelectedEntry}">
-              <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="vm:AssetRow">
-                  <Grid ColumnDefinitions="3*,Auto,Auto,Auto" Margin="4">
-                    <TextBlock Grid.Column="0" Text="{Binding Name}" />
-                    <TextBlock Grid.Column="1" Text="{Binding SizeDisplay}"
-                               Margin="12,0" Opacity="0.7" />
-                    <TextBlock Grid.Column="2" Text="{Binding Crc32Display}"
-                               Margin="12,0" Opacity="0.5" FontFamily="Consolas,monospace" />
-                    <TextBlock Grid.Column="3" Text="{Binding TimestampDisplay}"
-                               Margin="12,0" Opacity="0.5" />
-                  </Grid>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
-
-            <!-- Thumbnail grid: only .dds entries get a decoded preview; everything else
-                 (and any texture this project's DDS decoder rejects) falls back to a plain
-                 name tile rather than being hidden. -->
-            <ListBox IsVisible="{Binding IsGridView}"
-                     ItemsSource="{Binding Entries}"
-                     SelectedItem="{Binding SelectedEntry}">
-              <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <WrapPanel />
-                </ItemsPanelTemplate>
-              </ListBox.ItemsPanel>
-              <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="vm:AssetRow">
-                  <StackPanel Width="96" Margin="4" Spacing="2">
-                    <Border Width="88" Height="88" Background="{StaticResource TraftyBgDeepest}" CornerRadius="4">
-                      <Image Source="{Binding Thumbnail}" Stretch="Uniform"
-                             IsVisible="{Binding Thumbnail, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                    </Border>
-                    <TextBlock Text="{Binding Name}" FontSize="10" TextWrapping="Wrap"
-                               TextAlignment="Center" MaxLines="2" />
-                  </StackPanel>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
-          </DockPanel>
-        </TabItem>
-
-        <TabItem Header="World Props">
-          <!-- World props (.nhd) browsed from a loose folder, e.g. zones\Nifs -->
-          <ListBox ItemsSource="{Binding WorldProps}"
-                   SelectedItem="{Binding SelectedWorldProp}">
-            <ListBox.ItemTemplate>
-              <DataTemplate x:DataType="vm:WorldPropRow">
-                <Grid ColumnDefinitions="2*,2*,Auto" Margin="4">
-                  <TextBlock Grid.Column="0" Text="{Binding FileName}" />
-                  <TextBlock Grid.Column="1" Text="{Binding ModelName}"
-                             Margin="12,0" Opacity="0.7" />
-                  <TextBlock Grid.Column="2" Text="{Binding GridDisplay}"
-                             Margin="12,0" Opacity="0.5" FontFamily="Consolas,monospace" />
-                </Grid>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-        </TabItem>
-
-        <TabItem Header="Zone Map">
-          <!-- Fixture placements + boundary outline for a zone, loaded from its csv/dat
-               archive (fixtures.csv, nifs.csv, bound.csv). Screen coordinates are
-               pre-projected by the view model into a fixed 700x700 space; zoom/pan is a
-               pure view-layer RenderTransform on top of that, not a re-projection. -->
-          <Border x:Name="ZoneMapViewport"
-                  Background="{StaticResource TraftyBgDeepest}"
-                  ClipToBounds="True"
-                  Cursor="SizeAll"
-                  PointerWheelChanged="OnZoneMapPointerWheelChanged"
-                  PointerPressed="OnZoneMapPointerPressed"
-                  PointerMoved="OnZoneMapPointerMoved"
-                  PointerReleased="OnZoneMapPointerReleased">
-            <Canvas x:Name="ZoneMapCanvas" Width="700" Height="700">
-              <Image Source="{Binding ZoneTerrainImage}"
-                     Width="700" Height="700" Stretch="Fill"
-                     Opacity="0.85" IsVisible="{Binding ZoneTerrainImage, Converter={x:Static ObjectConverters.IsNotNull}}" />
-              <Polygon Points="{Binding ZoneBoundaryPoints}"
-                       Stroke="{StaticResource TraftyGold}" StrokeThickness="1.5" Fill="Transparent" />
-              <ItemsControl ItemsSource="{Binding ZoneFixtures}">
-                <ItemsControl.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <Canvas />
-                  </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate x:DataType="vm:ZoneFixtureRow">
-                    <Ellipse Width="5" Height="5"
-                             Canvas.Left="{Binding CanvasX}" Canvas.Top="{Binding CanvasY}"
-                             Fill="{StaticResource TraftyGold}"
-                             PointerPressed="OnZoneFixtureEllipsePointerPressed"
-                             Tag="{Binding}" />
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
-            </Canvas>
-          </Border>
-        </TabItem>
-
-        <TabItem Header="UI Windows">
-          <!-- Structural preview of a client UI XML WindowTemplate (e.g. chat_window.xml,
-               command_window.xml) — control positions/sizes as colored rectangles. No text
-               labels or real button textures (would need a font/TGA dependency this project
-               doesn't have), so the control list on the right carries labels instead. -->
-          <Grid ColumnDefinitions="2*,1*">
-            <Border Grid.Column="0" Background="{StaticResource TraftyBgDeepest}" Padding="8">
-              <Image Source="{Binding UiWindowPreviewImage}" Stretch="Uniform" />
-            </Border>
-            <ListBox Grid.Column="1" ItemsSource="{Binding UiWindowControls}"
-                     SelectedItem="{Binding SelectedUiControl}" Margin="4">
-              <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="vm:UiControlRow">
-                  <StackPanel Margin="2">
-                    <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" FontSize="12" />
-                    <TextBlock Text="{Binding SummaryDisplay}" Opacity="0.7" FontSize="11" />
-                  </StackPanel>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
-          </Grid>
-        </TabItem>
-      </TabControl>
-
-      <!-- Details / drop zone -->
-      <Border Grid.Column="1" Margin="0,8,8,8" Padding="16"
-              Background="{StaticResource TraftyBgPanel}" CornerRadius="6" BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1">
-        <StackPanel Spacing="12">
-
-          <StackPanel IsVisible="{Binding HasSound}" Spacing="6">
-            <Grid ColumnDefinitions="*,Auto">
-              <TextBlock Grid.Column="0" Text="{Binding SoundName}" FontWeight="Bold" FontSize="16" />
-              <Button Grid.Column="1" Content="✕" Click="OnCloseSoundClick" Padding="8,2"
-                      ToolTip.Tip="Close sound player" />
-            </Grid>
-            <TextBlock Text="{Binding SoundInfo}" Opacity="0.7" FontSize="12" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <Button Content="▶ Play" Click="OnPlaySoundClick" />
-              <Button Content="■ Stop" Click="OnStopSoundClick" />
-            </StackPanel>
-          </StackPanel>
-
-          <StackPanel IsVisible="{Binding TexturePreviewImage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                      Spacing="6">
-            <TextBlock Text="{Binding TexturePreviewName}" FontWeight="Bold" FontSize="16" />
-            <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="6" Padding="4">
-              <Image Source="{Binding TexturePreviewImage}" Stretch="Uniform"
-                     RenderOptions.BitmapInterpolationMode="None" Height="180" />
-            </Border>
-          </StackPanel>
-
-          <StackPanel IsVisible="{Binding ColorTableImage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                      Spacing="6">
-            <TextBlock Text="{Binding ColorTableName}" FontWeight="Bold" FontSize="16" />
-            <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="6" Padding="4">
-              <Image x:Name="ColorTableImageControl"
-                     Source="{Binding ColorTableImage}"
-                     Stretch="Uniform"
-                     RenderOptions.BitmapInterpolationMode="None"
-                     Height="220"
-                     PointerPressed="OnColorTableImagePointerPressed" />
-            </Border>
-
-            <TextBlock Text="Click a pixel to edit its color (Atmosphere Tweaker)."
-                       FontSize="11" Opacity="0.6" />
-
-            <StackPanel IsVisible="{Binding HasSelectedPixel}" Spacing="6">
-              <TextBlock>
-                <TextBlock.Text>
-                  <MultiBinding StringFormat="Pixel ({0}, {1})">
-                    <Binding Path="SelectedPixelX" />
-                    <Binding Path="SelectedPixelY" />
-                  </MultiBinding>
-                </TextBlock.Text>
-              </TextBlock>
-              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="R" VerticalAlignment="Center" Margin="0,0,8,4" />
-                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" Margin="0,0,0,4"
-                                Value="{Binding SelectedPixelR}" FormatString="0" />
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="G" VerticalAlignment="Center" Margin="0,0,8,4" />
-                <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Margin="0,0,0,4"
-                                Value="{Binding SelectedPixelG}" FormatString="0" />
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="B" VerticalAlignment="Center" />
-                <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255"
-                                Value="{Binding SelectedPixelB}" FormatString="0" />
+    <Grid Grid.Row="2" ColumnDefinitions="2.35*,0.95*" Margin="10" ColumnSpacing="10">
+      <Border Grid.Column="0" Classes="workbench" Padding="8">
+        <TabControl x:Name="WorkspaceTabs" SelectionChanged="OnWorkspaceTabChanged">
+          <TabItem Header="Archive Assets">
+            <DockPanel Margin="4">
+              <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="4,2,4,8">
+                <StackPanel Grid.Column="0" Spacing="2">
+                  <TextBlock Text="ARCHIVE WORKBENCH" Classes="kicker" />
+                  <TextBlock Text="Inspect, extract and replace assets inside the active container."
+                             Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+                </StackPanel>
+                <CheckBox Grid.Column="1" Content="Texture thumbnails" IsChecked="{Binding IsGridView}"
+                          VerticalAlignment="Center" />
               </Grid>
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <Button Content="Apply" Click="OnApplyColorTablePixelClick" />
-                <Button Content="Save…" Click="OnSaveColorTableClick" />
+
+              <ListBox x:Name="AssetList"
+                       IsVisible="{Binding !IsGridView}"
+                       ItemsSource="{Binding Entries}"
+                       SelectedItem="{Binding SelectedEntry}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:AssetRow">
+                    <Grid ColumnDefinitions="3*,Auto,Auto,Auto" Margin="8,5">
+                      <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                      <TextBlock Grid.Column="1" Text="{Binding SizeDisplay}" Margin="14,0" Opacity="0.7" />
+                      <TextBlock Grid.Column="2" Text="{Binding Crc32Display}" Margin="14,0" Opacity="0.5"
+                                 FontFamily="Consolas,monospace" />
+                      <TextBlock Grid.Column="3" Text="{Binding TimestampDisplay}" Margin="14,0" Opacity="0.5" />
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+
+              <ListBox IsVisible="{Binding IsGridView}"
+                       ItemsSource="{Binding Entries}"
+                       SelectedItem="{Binding SelectedEntry}">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:AssetRow">
+                    <Border Width="126" Margin="4" Padding="6" Background="{StaticResource TraftyBgRaised}"
+                            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5">
+                      <StackPanel Spacing="4">
+                        <Border Height="94" Background="{StaticResource TraftyBgDeepest}" CornerRadius="3">
+                          <Image Source="{Binding Thumbnail}" Stretch="Uniform"
+                                 IsVisible="{Binding Thumbnail, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        </Border>
+                        <TextBlock Text="{Binding Name}" FontSize="10" TextWrapping="Wrap"
+                                   TextAlignment="Center" MaxLines="2" />
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </DockPanel>
+          </TabItem>
+
+          <TabItem Header="World Props">
+            <DockPanel Margin="4">
+              <StackPanel DockPanel.Dock="Top" Margin="4,2,4,8" Spacing="2">
+                <TextBlock Text="WORLD PROP WORKSHOP" Classes="kicker" />
+                <TextBlock Text="Inspect NHD world objects and the models they reference."
+                           Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
               </StackPanel>
-            </StackPanel>
-          </StackPanel>
+              <ListBox ItemsSource="{Binding WorldProps}" SelectedItem="{Binding SelectedWorldProp}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="vm:WorldPropRow">
+                    <Grid ColumnDefinitions="2*,2*,Auto" Margin="8,5">
+                      <TextBlock Grid.Column="0" Text="{Binding FileName}" />
+                      <TextBlock Grid.Column="1" Text="{Binding ModelName}" Margin="14,0" Opacity="0.7" />
+                      <TextBlock Grid.Column="2" Text="{Binding GridDisplay}" Margin="14,0" Opacity="0.5"
+                                 FontFamily="Consolas,monospace" />
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </DockPanel>
+          </TabItem>
 
-          <StackPanel IsVisible="{Binding SelectedZoneFixture, Converter={x:Static ObjectConverters.IsNotNull}}"
-                      Spacing="4">
-            <TextBlock Text="Selected Zone Fixture" FontWeight="Bold" FontSize="16" />
-            <TextBlock Text="{Binding SelectedZoneFixture.InfoDisplay}" TextWrapping="Wrap" />
-          </StackPanel>
+          <TabItem Header="Zone Map">
+            <Grid RowDefinitions="Auto,*" Margin="4">
+              <StackPanel Grid.Row="0" Margin="4,2,4,8" Spacing="2">
+                <TextBlock Text="CARTOGRAPHER'S TABLE" Classes="kicker" />
+                <TextBlock Text="Boundary, fixtures and terrain projected into one navigable zone view."
+                           Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+              </StackPanel>
+              <Border Grid.Row="1" x:Name="ZoneMapViewport"
+                      Background="{StaticResource TraftyBgDeepest}"
+                      BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5"
+                      ClipToBounds="True" Cursor="SizeAll"
+                      PointerWheelChanged="OnZoneMapPointerWheelChanged"
+                      PointerPressed="OnZoneMapPointerPressed"
+                      PointerMoved="OnZoneMapPointerMoved"
+                      PointerReleased="OnZoneMapPointerReleased">
+                <Canvas x:Name="ZoneMapCanvas" Width="700" Height="700">
+                  <Image Source="{Binding ZoneTerrainImage}" Width="700" Height="700" Stretch="Fill" Opacity="0.85"
+                         IsVisible="{Binding ZoneTerrainImage, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                  <Polygon Points="{Binding ZoneBoundaryPoints}" Stroke="{StaticResource TraftyGold}"
+                           StrokeThickness="1.5" Fill="Transparent" />
+                  <ItemsControl ItemsSource="{Binding ZoneFixtures}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate><Canvas /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="vm:ZoneFixtureRow">
+                        <Ellipse Width="6" Height="6" Canvas.Left="{Binding CanvasX}" Canvas.Top="{Binding CanvasY}"
+                                 Fill="{StaticResource TraftyGoldBright}"
+                                 PointerPressed="OnZoneFixtureEllipsePointerPressed" Tag="{Binding}" />
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </Canvas>
+              </Border>
+            </Grid>
+          </TabItem>
 
-          <TextBlock Text="Selected Asset" FontWeight="Bold" FontSize="16" />
-
-          <StackPanel IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}"
-                      Spacing="4">
-            <TextBlock Text="{Binding SelectedEntry.Name}" FontWeight="SemiBold" />
-            <TextBlock Text="{Binding SelectedEntry.SizeDisplay}" Opacity="0.7" />
-            <TextBlock Text="{Binding SelectedEntry.Crc32Display}" Opacity="0.5"
-                       FontFamily="Consolas,monospace" />
-            <TextBlock Text="{Binding ModelInfo}"
-                       IsVisible="{Binding ModelInfo, Converter={x:Static ObjectConverters.IsNotNull}}"
-                       Foreground="{StaticResource TraftyGold}" FontSize="12" Margin="0,4,0,0" TextWrapping="Wrap" />
-            <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="6" Padding="4"
-                    IsVisible="{Binding ModelPreviewImage, Converter={x:Static ObjectConverters.IsNotNull}}">
-              <Image x:Name="ModelPreviewImageControl"
-                     Source="{Binding ModelPreviewImage}" Stretch="Uniform" Height="220"
-                     Cursor="SizeAll"
-                     PointerPressed="OnModelPreviewPointerPressed"
-                     PointerMoved="OnModelPreviewPointerMoved"
-                     PointerReleased="OnModelPreviewPointerReleased" />
-            </Border>
-            <Button Content="Extract Selected…" Click="OnExtractSelectedClick" HorizontalAlignment="Left" />
-          </StackPanel>
-
-          <Border x:Name="DropZone"
-                  Height="180"
-                  BorderBrush="#555" BorderThickness="2"
-                  CornerRadius="6"
-                  Background="{StaticResource TraftyBgDeepest}"
-                  DragDrop.AllowDrop="True">
-            <TextBlock Text="Drag a PNG/JPG here to replace the selected asset&#x27;s texture"
-                       TextWrapping="Wrap" TextAlignment="Center"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Margin="12" Opacity="0.6" />
-          </Border>
-
-          <TextBlock Text="Replaced assets are backed up automatically before writing (Backup Vault)."
-                     TextWrapping="Wrap" FontSize="11" Opacity="0.5" />
-
-          <StackPanel IsVisible="{Binding HasBackups}" Spacing="6">
-            <TextBlock Text="Backup Vault" FontWeight="Bold" FontSize="14" />
-            <ListBox x:Name="BackupList"
-                     ItemsSource="{Binding Backups}"
-                     SelectedItem="{Binding SelectedBackup}"
-                     MaxHeight="140">
-              <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="vm:BackupRow">
-                  <TextBlock Text="{Binding TimestampDisplay}" FontSize="12" />
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Content="Restore Selected Backup"
-                    Click="OnRestoreBackupClick"
-                    IsEnabled="{Binding CanRestoreSelectedBackup}"
-                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
-          </StackPanel>
-
-        </StackPanel>
+          <TabItem Header="UI Windows">
+            <Grid RowDefinitions="Auto,*" Margin="4">
+              <StackPanel Grid.Row="0" Margin="4,2,4,8" Spacing="2">
+                <TextBlock Text="INTERFACE BENCH" Classes="kicker" />
+                <TextBlock Text="Inspect WindowTemplate structure and client control placement."
+                           Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+              </StackPanel>
+              <Grid Grid.Row="1" ColumnDefinitions="2*,1*" ColumnSpacing="8">
+                <Border Grid.Column="0" Background="{StaticResource TraftyBgDeepest}" Padding="8"
+                        BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5">
+                  <Image Source="{Binding UiWindowPreviewImage}" Stretch="Uniform" />
+                </Border>
+                <Border Grid.Column="1" Background="{StaticResource TraftyBgRaised}" CornerRadius="5" Padding="4">
+                  <ListBox ItemsSource="{Binding UiWindowControls}" SelectedItem="{Binding SelectedUiControl}">
+                    <ListBox.ItemTemplate>
+                      <DataTemplate x:DataType="vm:UiControlRow">
+                        <StackPanel Margin="5">
+                          <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" FontSize="12" />
+                          <TextBlock Text="{Binding SummaryDisplay}" Opacity="0.7" FontSize="11" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+                </Border>
+              </Grid>
+            </Grid>
+          </TabItem>
+        </TabControl>
       </Border>
 
+      <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="10">
+          <Border x:Name="GuideCard" Padding="14" Background="{StaticResource TraftyBgPanel}"
+                  BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="1" CornerRadius="7">
+            <StackPanel Spacing="10">
+              <TextBlock Text="WORKSHOP GUIDE" Classes="kicker" />
+              <Grid ColumnDefinitions="78,*" ColumnSpacing="12">
+                <Border x:Name="GuidePortraitRing" Grid.Column="0" Width="70" Height="70" CornerRadius="35"
+                        Background="{StaticResource TraftyBgDeepest}" BorderBrush="{StaticResource TraftyGoldDim}"
+                        BorderThickness="2" VerticalAlignment="Top">
+                  <TextBlock x:Name="GuideSigil" Text="A" FontSize="28" FontWeight="Bold"
+                             Foreground="{StaticResource TraftyGoldBright}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" Spacing="2">
+                  <TextBlock x:Name="GuideName" Text="Aelwyn" FontSize="19" FontWeight="Bold"
+                             Foreground="{StaticResource TraftyGoldBright}" />
+                  <TextBlock x:Name="GuideRole" Text="Elven Archivist" Foreground="{StaticResource TraftyTextMuted}" />
+                </StackPanel>
+              </Grid>
+              <TextBlock x:Name="GuideMessage" TextWrapping="Wrap" FontSize="12" />
+              <Border Classes="speech">
+                <TextBlock x:Name="GuideQuip" Classes="flavor" TextWrapping="Wrap" FontSize="11" />
+              </Border>
+            </StackPanel>
+          </Border>
+
+          <Border Classes="workbench" Padding="14">
+            <StackPanel Spacing="12">
+              <StackPanel IsVisible="{Binding HasSound}" Spacing="7">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel Grid.Column="0">
+                    <TextBlock Text="SOUND BENCH" Classes="kicker" />
+                    <TextBlock Text="{Binding SoundName}" Classes="sectionTitle" />
+                  </StackPanel>
+                  <Button Grid.Column="1" Content="Close" Click="OnCloseSoundClick" Padding="8,4" />
+                </Grid>
+                <TextBlock Text="{Binding SoundInfo}" Opacity="0.7" FontSize="12" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button Classes="primary" Content="Play" Click="OnPlaySoundClick" />
+                  <Button Content="Stop" Click="OnStopSoundClick" />
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel IsVisible="{Binding TexturePreviewImage, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="7">
+                <TextBlock Text="TEXTURE BENCH" Classes="kicker" />
+                <TextBlock Text="{Binding TexturePreviewName}" Classes="sectionTitle" />
+                <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="5" Padding="5"
+                        BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1">
+                  <Image Source="{Binding TexturePreviewImage}" Stretch="Uniform"
+                         RenderOptions.BitmapInterpolationMode="None" Height="190" />
+                </Border>
+              </StackPanel>
+
+              <StackPanel IsVisible="{Binding ColorTableImage, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="7">
+                <TextBlock Text="ATMOSPHERE BENCH" Classes="kicker" />
+                <TextBlock Text="{Binding ColorTableName}" Classes="sectionTitle" />
+                <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="5" Padding="5"
+                        BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1">
+                  <Image x:Name="ColorTableImageControl" Source="{Binding ColorTableImage}" Stretch="Uniform"
+                         RenderOptions.BitmapInterpolationMode="None" Height="220"
+                         PointerPressed="OnColorTableImagePointerPressed" />
+                </Border>
+                <TextBlock Text="Click a pixel to edit its color." FontSize="11" Opacity="0.6" />
+
+                <StackPanel IsVisible="{Binding HasSelectedPixel}" Spacing="6">
+                  <TextBlock>
+                    <TextBlock.Text>
+                      <MultiBinding StringFormat="Pixel ({0}, {1})">
+                        <Binding Path="SelectedPixelX" />
+                        <Binding Path="SelectedPixelY" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                  <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="R" Margin="0,0,8,4" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" Margin="0,0,0,4"
+                                   Value="{Binding SelectedPixelR}" FormatString="0" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="G" Margin="0,0,8,4" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" Margin="0,0,0,4"
+                                   Value="{Binding SelectedPixelG}" FormatString="0" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="B" Margin="0,0,8,0" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255"
+                                   Value="{Binding SelectedPixelB}" FormatString="0" />
+                  </Grid>
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Classes="primary" Content="Apply" Click="OnApplyColorTablePixelClick" />
+                    <Button Content="Save…" Click="OnSaveColorTableClick" />
+                  </StackPanel>
+                </StackPanel>
+              </StackPanel>
+
+              <StackPanel IsVisible="{Binding SelectedZoneFixture, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="4">
+                <TextBlock Text="SELECTED FIXTURE" Classes="kicker" />
+                <TextBlock Text="{Binding SelectedZoneFixture.InfoDisplay}" TextWrapping="Wrap" />
+              </StackPanel>
+
+              <StackPanel Spacing="5">
+                <TextBlock Text="SELECTED ASSET" Classes="kicker" />
+                <StackPanel IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="5">
+                  <TextBlock Text="{Binding SelectedEntry.Name}" Classes="sectionTitle" TextWrapping="Wrap" />
+                  <TextBlock Text="{Binding SelectedEntry.SizeDisplay}" Opacity="0.7" />
+                  <TextBlock Text="{Binding SelectedEntry.Crc32Display}" Opacity="0.5" FontFamily="Consolas,monospace" />
+                  <TextBlock Text="{Binding ModelInfo}"
+                             IsVisible="{Binding ModelInfo, Converter={x:Static ObjectConverters.IsNotNull}}"
+                             Foreground="{StaticResource TraftyGold}" FontSize="12" TextWrapping="Wrap" />
+                  <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="5" Padding="5"
+                          BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1"
+                          IsVisible="{Binding ModelPreviewImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Image x:Name="ModelPreviewImageControl" Source="{Binding ModelPreviewImage}" Stretch="Uniform" Height="230"
+                           Cursor="SizeAll" PointerPressed="OnModelPreviewPointerPressed"
+                           PointerMoved="OnModelPreviewPointerMoved" PointerReleased="OnModelPreviewPointerReleased" />
+                  </Border>
+                  <Button Classes="primary" Content="Extract Selected…" Click="OnExtractSelectedClick"
+                          HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+                </StackPanel>
+              </StackPanel>
+
+              <Border x:Name="DropZone" Height="126" BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="1"
+                      CornerRadius="6" Background="{StaticResource TraftyBgDeepest}" DragDrop.AllowDrop="True">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4" Margin="12">
+                  <TextBlock Text="DROP REPLACEMENT TEXTURE" Classes="kicker" HorizontalAlignment="Center" />
+                  <TextBlock Text="Drag a PNG/JPG here to replace the selected asset's texture"
+                             TextWrapping="Wrap" TextAlignment="Center" Opacity="0.65" FontSize="11" />
+                </StackPanel>
+              </Border>
+
+              <TextBlock Text="Archive writes are backed up automatically before Trafty changes the file."
+                         TextWrapping="Wrap" FontSize="10" Foreground="{StaticResource TraftyTextFaint}" />
+
+              <StackPanel IsVisible="{Binding HasBackups}" Spacing="6">
+                <TextBlock Text="BACKUP VAULT" Classes="kicker" />
+                <ListBox x:Name="BackupList" ItemsSource="{Binding Backups}" SelectedItem="{Binding SelectedBackup}" MaxHeight="140">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:BackupRow">
+                      <TextBlock Text="{Binding TimestampDisplay}" FontSize="12" Margin="4" />
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Content="Restore Selected Backup" Click="OnRestoreBackupClick"
+                        IsEnabled="{Binding CanRestoreSelectedBackup}" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
     </Grid>
 
-    <!-- Status bar -->
-    <Border Grid.Row="3" Padding="12,8" Background="{StaticResource TraftyBgPanel}"
+    <Border Grid.Row="3" Padding="14,8" Background="{StaticResource TraftyBgPanel}"
             BorderBrush="{StaticResource TraftyBorder}" BorderThickness="0,1,0,0">
-      <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TraftyTextMuted}" FontSize="12" />
+      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+        <TextBlock Grid.Column="0" Text="FORGE LOG" Classes="kicker" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="{Binding StatusText}" Foreground="{StaticResource TraftyTextMuted}"
+                   FontSize="12" TextTrimming="CharacterEllipsis" />
+      </Grid>
     </Border>
 
   </Grid>
-
 </Window>

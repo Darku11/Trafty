@@ -2,24 +2,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Trafty.App.App"
              RequestedThemeVariant="Dark">
-  <Application.Styles>
-    <FluentTheme />
-  </Application.Styles>
 
   <Application.Resources>
-    <SolidColorBrush x:Key="TraftyBgDeepest">#0A0A0E</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyBgPanel">#131319</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyBgCard">#1A1A22</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyBgCardHover">#22222C</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyBorder">#2C2C38</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyGold">#C9A24A</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyGoldBright">#E4C374</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyGoldDim">#8A7238</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyTextPrimary">#EDE8DC</SolidColorBrush>
-    <SolidColorBrush x:Key="TraftyTextMuted">#8F8A7E</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgDeepest">#090806</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgPanel">#15110D</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgRaised">#1D1710</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgCard">#251D14</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBgCardHover">#312719</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBorder">#493823</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyBorderBright">#6A5130</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGold">#C8A35D</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGoldBright">#EBCF8B</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyGoldDim">#80683A</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyTextPrimary">#EFE7D7</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyTextMuted">#A09179</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyTextFaint">#716554</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyParchment">#D7C49D</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftySpeechBg">#201910</SolidColorBrush>
+    <SolidColorBrush x:Key="TraftyDanger">#8C4B43</SolidColorBrush>
   </Application.Resources>
 
   <Application.Styles>
+    <FluentTheme />
+
     <Style Selector="Window">
       <Setter Property="Background" Value="{StaticResource TraftyBgDeepest}" />
       <Setter Property="FontFamily" Value="Inter" />
@@ -29,56 +34,125 @@
       <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
     </Style>
 
+    <Style Selector="TextBlock.kicker">
+      <Setter Property="Foreground" Value="{StaticResource TraftyGoldDim}" />
+      <Setter Property="FontSize" Value="10" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="LetterSpacing" Value="2" />
+    </Style>
+
+    <Style Selector="TextBlock.sectionTitle">
+      <Setter Property="Foreground" Value="{StaticResource TraftyGoldBright}" />
+      <Setter Property="FontSize" Value="15" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBlock.flavor">
+      <Setter Property="Foreground" Value="{StaticResource TraftyParchment}" />
+      <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
     <Style Selector="Button">
       <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
       <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="4" />
       <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
-      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="Padding" Value="12,8" />
       <Setter Property="Cursor" Value="Hand" />
     </Style>
+
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{StaticResource TraftyBgRaised}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyGoldDim}" />
+      <Setter Property="Foreground" Value="{StaticResource TraftyGoldBright}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
     <Style Selector="Button:pointerover /template/ ContentPresenter">
       <Setter Property="Background" Value="{StaticResource TraftyBgCardHover}" />
       <Setter Property="BorderBrush" Value="{StaticResource TraftyGold}" />
       <Setter Property="TextBlock.Foreground" Value="{StaticResource TraftyGoldBright}" />
     </Style>
+
     <Style Selector="Button:pressed /template/ ContentPresenter">
       <Setter Property="Background" Value="{StaticResource TraftyBgPanel}" />
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="Background" Value="{StaticResource TraftyBgRaised}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
+    </Style>
+
+    <Style Selector="ComboBox">
+      <Setter Property="Background" Value="{StaticResource TraftyBgRaised}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+      <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
+    </Style>
+
+    <Style Selector="NumericUpDown">
+      <Setter Property="Background" Value="{StaticResource TraftyBgRaised}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+    </Style>
+
+    <Style Selector="Border.workbench">
+      <Setter Property="Background" Value="{StaticResource TraftyBgPanel}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+    </Style>
+
+    <Style Selector="Border.toolbarGroup">
+      <Setter Property="Background" Value="{StaticResource TraftyBgPanel}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="10,8" />
+      <Setter Property="Margin" Value="0,0,8,8" />
+    </Style>
+
+    <Style Selector="Border.speech">
+      <Setter Property="Background" Value="{StaticResource TraftySpeechBg}" />
+      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorderBright}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Padding" Value="10" />
     </Style>
 
     <Style Selector="TabControl">
       <Setter Property="Background" Value="Transparent" />
     </Style>
+
     <Style Selector="TabItem">
       <Setter Property="Foreground" Value="{StaticResource TraftyTextMuted}" />
       <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Padding" Value="14,9" />
     </Style>
+
     <Style Selector="TabItem:selected /template/ ContentPresenter">
-      <Setter Property="TextBlock.Foreground" Value="{StaticResource TraftyGold}" />
+      <Setter Property="TextBlock.Foreground" Value="{StaticResource TraftyGoldBright}" />
     </Style>
 
     <Style Selector="ListBox">
       <Setter Property="Background" Value="Transparent" />
     </Style>
+
     <Style Selector="ListBoxItem">
       <Setter Property="CornerRadius" Value="3" />
       <Setter Property="Margin" Value="0,1" />
     </Style>
+
     <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
       <Setter Property="Background" Value="{StaticResource TraftyBgCardHover}" />
     </Style>
+
     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
       <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
     </Style>
 
     <Style Selector="CheckBox">
       <Setter Property="Foreground" Value="{StaticResource TraftyTextPrimary}" />
-    </Style>
-
-    <Style Selector="NumericUpDown">
-      <Setter Property="Background" Value="{StaticResource TraftyBgCard}" />
-      <Setter Property="BorderBrush" Value="{StaticResource TraftyBorder}" />
     </Style>
 
     <Style Selector="ScrollBar">

@@ -1,0 +1,128 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Trafty.App.ViewModels"
+        x:Class="Trafty.App.Views.ClientExplorerWindow"
+        x:DataType="vm:ClientExplorerViewModel"
+        Title="Trafty — Client Explorer"
+        Width="1160" Height="760"
+        MinWidth="820" MinHeight="560"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="Auto,Auto,*,Auto">
+    <Border Grid.Row="0" Padding="22,16" Background="{StaticResource TraftyBgPanel}"
+            BorderBrush="{StaticResource TraftyGoldDim}" BorderThickness="0,0,0,1">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+        <StackPanel Grid.Column="0" Spacing="3">
+          <TextBlock Text="CLIENT EXPLORER" FontSize="22" FontWeight="Bold" LetterSpacing="4"
+                     Foreground="{StaticResource TraftyGoldBright}" />
+          <TextBlock Text="Turn the client into a searchable asset library."
+                     Foreground="{StaticResource TraftyTextMuted}" FontSize="12" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+          <TextBlock Text="SCAN TARGET" Classes="kicker" HorizontalAlignment="Right" />
+          <TextBlock Text="{Binding RootDisplayName}" Foreground="{StaticResource TraftyGold}" FontWeight="SemiBold" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1" ColumnDefinitions="*,220" Margin="12" ColumnSpacing="8">
+      <TextBox Grid.Column="0" Watermark="Search models, houses, trees, archives, textures…"
+               Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+      <ComboBox Grid.Column="1" ItemsSource="{Binding KindFilters}" SelectedItem="{Binding SelectedKind}" />
+    </Grid>
+
+    <Grid Grid.Row="2" ColumnDefinitions="2.2*,0.95*" Margin="12,0,12,10" ColumnSpacing="10">
+      <Border Grid.Column="0" Classes="workbench" Padding="6">
+        <Grid RowDefinitions="Auto,*">
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8,6,8,8">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="ASSET LIBRARY" Classes="kicker" />
+              <TextBlock Text="Loose files and archive contents share one searchable index."
+                         Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+            </StackPanel>
+            <TextBlock Grid.Column="1" Text="{Binding VisibleCountText}" VerticalAlignment="Center"
+                       Foreground="{StaticResource TraftyGoldDim}" />
+          </Grid>
+
+          <ListBox Grid.Row="1" x:Name="ClientAssetList"
+                   ItemsSource="{Binding Assets}" SelectedItem="{Binding SelectedAsset}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ClientAssetRow">
+                <Grid ColumnDefinitions="2*,130,3*,90" Margin="8,5">
+                  <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="1" Text="{Binding KindDisplay}" Margin="12,0" Opacity="0.75" />
+                  <TextBlock Grid.Column="2" Text="{Binding LocationDisplay}" Margin="12,0"
+                             Opacity="0.55" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="3" Text="{Binding SizeDisplay}" HorizontalAlignment="Right" Opacity="0.55" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="10">
+          <Border Padding="13" Background="{StaticResource TraftyBgPanel}"
+                  BorderBrush="#7D9A78" BorderThickness="1" CornerRadius="7">
+            <StackPanel Spacing="9">
+              <TextBlock Text="ARCHIVE GUIDE" Classes="kicker" />
+              <Grid ColumnDefinitions="64,*" ColumnSpacing="10">
+                <Border Grid.Column="0" Width="58" Height="58" CornerRadius="29"
+                        Background="{StaticResource TraftyBgDeepest}" BorderBrush="#7D9A78" BorderThickness="2">
+                  <TextBlock Text="A" FontSize="23" FontWeight="Bold" Foreground="{StaticResource TraftyGoldBright}"
+                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                  <TextBlock Text="Aelwyn" Classes="sectionTitle" />
+                  <TextBlock Text="Elven Archivist" Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+                </StackPanel>
+              </Grid>
+              <TextBlock Text="Search first. Learn the archive layout second. Trafty should remember where things live so you do not have to."
+                         TextWrapping="Wrap" FontSize="11" />
+              <Border Classes="speech">
+                <TextBlock Text="If Mythic hid a house in an archive named after a shrub, that is their problem now."
+                           Classes="flavor" TextWrapping="Wrap" FontSize="10" />
+              </Border>
+            </StackPanel>
+          </Border>
+
+          <Border Classes="workbench" Padding="14">
+            <StackPanel Spacing="9">
+              <TextBlock Text="ASSET DETAILS" Classes="kicker" />
+
+              <StackPanel IsVisible="{Binding SelectedAsset, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="6">
+                <TextBlock Text="{Binding SelectedAsset.Name}" Classes="sectionTitle" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding SelectedAsset.KindDisplay}" Foreground="{StaticResource TraftyGold}" />
+                <TextBlock Text="{Binding SelectedAsset.SizeDisplay}" Opacity="0.7" />
+
+                <Border Background="{StaticResource TraftyBgDeepest}" CornerRadius="5" Padding="5"
+                        BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1"
+                        IsVisible="{Binding PreviewImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                  <Image Source="{Binding PreviewImage}" Height="300" Stretch="Uniform"
+                         RenderOptions.BitmapInterpolationMode="None" />
+                </Border>
+
+                <TextBlock Text="{Binding PreviewInfo}" TextWrapping="Wrap"
+                           Foreground="{StaticResource TraftyGold}" FontSize="12" />
+
+                <TextBlock Text="LOCATION" Classes="kicker" Margin="0,8,0,0" />
+                <TextBlock Text="{Binding SelectedAsset.LocationDisplay}" TextWrapping="Wrap" Opacity="0.7" />
+                <TextBlock Text="PHYSICAL SOURCE" Classes="kicker" Margin="0,8,0,0" />
+                <TextBlock Text="{Binding SelectedAsset.PhysicalPath}" TextWrapping="Wrap" Opacity="0.55" FontSize="10" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+
+    <Border Grid.Row="3" Padding="13,8" Background="{StaticResource TraftyBgPanel}"
+            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="0,1,0,0">
+      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+        <TextBlock Grid.Column="0" Text="INDEX LOG" Classes="kicker" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Text="{Binding SummaryText}" FontSize="12" Foreground="{StaticResource TraftyTextMuted}" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
