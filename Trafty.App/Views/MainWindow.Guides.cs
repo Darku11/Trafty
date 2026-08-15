@@ -58,7 +58,7 @@ public partial class MainWindow
 
     private void SetGuide(GuideProfile profile)
     {
-        TextBlock? sigil = this.FindControl<TextBlock>("GuideSigil");
+        Avalonia.Controls.Shapes.Path? sigil = this.FindControl<Avalonia.Controls.Shapes.Path>("GuideSigil");
         TextBlock? name = this.FindControl<TextBlock>("GuideName");
         TextBlock? role = this.FindControl<TextBlock>("GuideRole");
         TextBlock? message = this.FindControl<TextBlock>("GuideMessage");
@@ -66,9 +66,12 @@ public partial class MainWindow
         Border? portraitRing = this.FindControl<Border>("GuidePortraitRing");
         Border? guideCard = this.FindControl<Border>("GuideCard");
 
+        var accent = new SolidColorBrush(Color.Parse(profile.AccentHex));
+
         if (sigil is not null)
         {
-            sigil.Text = profile.Sigil;
+            sigil.Data = Geometry.Parse(profile.SigilGeometry);
+            sigil.Fill = accent;
         }
 
         if (name is not null)
@@ -90,8 +93,6 @@ public partial class MainWindow
         {
             quip.Text = profile.Quip;
         }
-
-        var accent = new SolidColorBrush(Color.Parse(profile.AccentHex));
 
         if (portraitRing is not null)
         {

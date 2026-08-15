@@ -45,24 +45,28 @@ public partial class MainWindow : Window
             this.FindControl<Popup>("AssetPreviewPopupSmall")!,
             this.FindControl<Image>("AssetPreviewImageSmall")!,
             this.FindControl<Popup>("AssetPreviewPopupLarge")!,
-            this.FindControl<Image>("AssetPreviewImageLarge")!);
+            this.FindControl<Image>("AssetPreviewImageLarge")!,
+            smallMessage: this.FindControl<TextBlock>("AssetPreviewMessageSmall"));
     }
 
     /// <summary>
-    /// Right-click on an asset row opens a small thumbnail preview near the cursor; hovering
-    /// over that thumbnail (handled by <see cref="AssetPreviewPopupController"/>) swaps to a
-    /// larger popup. DDS entries already have a decoded <see cref="AssetRow.Thumbnail"/> from
-    /// the archive load, so those show instantly — everything else (TGA, NIF) is rendered
-    /// off the UI thread on demand.
+    /// Right-click on an asset row opens a small preview popup near the cursor — a thumbnail
+    /// for a previewable format, or a short explanation otherwise. Hovering over a thumbnail
+    /// (handled by <see cref="AssetPreviewPopupController"/>) swaps to a larger popup. DDS
+    /// entries already have a decoded <see cref="AssetRow.Thumbnail"/> from the archive load,
+    /// so those show instantly — everything else (TGA, NIF) is rendered off the UI thread on
+    /// demand. Bound to the ListBox rather than each row's DataTemplate so it fires reliably
+    /// no matter which child control (text, image, empty space) the click landed on.
     /// </summary>
     private async void OnAssetContextRequested(object? sender, ContextRequestedEventArgs e)
     {
-        if (sender is not Control { DataContext: AssetRow row } || ArchivePath is null)
+        if (FindDataContext<AssetRow>(e.Source as StyledElement) is not { } row || ArchivePath is null)
         {
             return;
         }
 
         e.Handled = true;
+        _previewPopup.HideAll();
 
         if (row.Thumbnail is not null)
         {
@@ -72,6 +76,7 @@ public partial class MainWindow : Window
 
         if (!AssetPreviewRenderer.IsPreviewable(row.Extension))
         {
+            _previewPopup.ShowMessage($"\"{row.Name}\" has no visual preview — Trafty can only render .dds, .tga and .nif files.");
             return;
         }
 
@@ -100,11 +105,28 @@ public partial class MainWindow : Window
 
         if (png is null)
         {
+            _previewPopup.ShowMessage($"\"{row.Name}\" could not be rendered — the file may use a variant of the format Trafty doesn't support yet.");
             return;
         }
 
         using var stream = new MemoryStream(png, writable: false);
         _previewPopup.ShowSmall(new Bitmap(stream), row.Name);
+    }
+
+    /// <summary>Walks up from a clicked visual (e.Source) to the nearest ancestor whose DataContext is a T.</summary>
+    private static T? FindDataContext<T>(StyledElement? element) where T : class
+    {
+        while (element is not null)
+        {
+            if (element.DataContext is T match)
+            {
+                return match;
+            }
+
+            element = element.Parent;
+        }
+
+        return null;
     }
 
     private string? ArchivePath => _viewModel.ArchivePath;

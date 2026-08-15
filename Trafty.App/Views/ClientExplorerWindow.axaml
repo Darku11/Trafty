@@ -45,11 +45,11 @@
           </Grid>
 
           <ListBox Grid.Row="1" x:Name="ClientAssetList"
-                   ItemsSource="{Binding Assets}" SelectedItem="{Binding SelectedAsset}">
+                   ItemsSource="{Binding Assets}" SelectedItem="{Binding SelectedAsset}"
+                   ContextRequested="OnAssetContextRequested">
             <ListBox.ItemTemplate>
               <DataTemplate x:DataType="vm:ClientAssetRow">
-                <Grid ColumnDefinitions="2*,130,3*,90" Margin="8,5"
-                      ContextRequested="OnAssetContextRequested">
+                <Grid ColumnDefinitions="2*,130,3*,90" Margin="8,5">
                   <TextBlock Grid.Column="0" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                   <TextBlock Grid.Column="1" Text="{Binding KindDisplay}" Margin="12,0" Opacity="0.75" />
                   <TextBlock Grid.Column="2" Text="{Binding LocationDisplay}" Margin="12,0"
@@ -71,8 +71,10 @@
               <Grid ColumnDefinitions="64,*">
                 <Border Grid.Column="0" Width="58" Height="58" CornerRadius="29"
                         Background="{StaticResource TraftyBgDeepest}" BorderBrush="#7D9A78" BorderThickness="2">
-                  <TextBlock Text="A" FontSize="23" FontWeight="Bold" Foreground="{StaticResource TraftyGoldBright}"
-                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <Viewbox Width="28" Height="28" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Path Data="M12,2 L18,12 L12,22 L6,12 Z" Stretch="Uniform"
+                          Fill="{StaticResource TraftyGoldBright}" />
+                  </Viewbox>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
                   <TextBlock Text="Aelwyn" Classes="sectionTitle" />
@@ -129,8 +131,12 @@
     <Popup x:Name="AssetPreviewPopupSmall" Placement="Pointer" HorizontalOffset="16" VerticalOffset="16"
            IsLightDismissEnabled="False">
       <Border Background="{StaticResource TraftyBgDeepest}" BorderBrush="{StaticResource TraftyGold}"
-              BorderThickness="1" CornerRadius="4" Padding="4">
-        <Image x:Name="AssetPreviewImageSmall" Width="140" Height="140" Stretch="Uniform" />
+              BorderThickness="1" CornerRadius="4" Padding="8">
+        <Panel>
+          <Image x:Name="AssetPreviewImageSmall" Width="140" Height="140" Stretch="Uniform" />
+          <TextBlock x:Name="AssetPreviewMessageSmall" IsVisible="False" MaxWidth="200" TextWrapping="Wrap"
+                     Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+        </Panel>
       </Border>
     </Popup>
 

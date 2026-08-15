@@ -103,11 +103,11 @@
               <ListBox x:Name="AssetList"
                        IsVisible="{Binding !IsGridView}"
                        ItemsSource="{Binding Entries}"
-                       SelectedItem="{Binding SelectedEntry}">
+                       SelectedItem="{Binding SelectedEntry}"
+                       ContextRequested="OnAssetContextRequested">
                 <ListBox.ItemTemplate>
                   <DataTemplate x:DataType="vm:AssetRow">
-                    <Grid ColumnDefinitions="3*,Auto,Auto,Auto" Margin="8,5"
-                          ContextRequested="OnAssetContextRequested">
+                    <Grid ColumnDefinitions="3*,Auto,Auto,Auto" Margin="8,5">
                       <TextBlock Grid.Column="0" Text="{Binding Name}" />
                       <TextBlock Grid.Column="1" Text="{Binding SizeDisplay}" Margin="14,0" Opacity="0.7" />
                       <TextBlock Grid.Column="2" Text="{Binding Crc32Display}" Margin="14,0" Opacity="0.5"
@@ -118,9 +118,11 @@
                 </ListBox.ItemTemplate>
               </ListBox>
 
-              <ListBox IsVisible="{Binding IsGridView}"
+              <ListBox x:Name="AssetGrid"
+                       IsVisible="{Binding IsGridView}"
                        ItemsSource="{Binding Entries}"
-                       SelectedItem="{Binding SelectedEntry}">
+                       SelectedItem="{Binding SelectedEntry}"
+                       ContextRequested="OnAssetContextRequested">
                 <ListBox.ItemsPanel>
                   <ItemsPanelTemplate>
                     <WrapPanel />
@@ -129,8 +131,7 @@
                 <ListBox.ItemTemplate>
                   <DataTemplate x:DataType="vm:AssetRow">
                     <Border Width="126" Margin="4" Padding="6" Background="{StaticResource TraftyBgRaised}"
-                            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5"
-                            ContextRequested="OnAssetContextRequested">
+                            BorderBrush="{StaticResource TraftyBorder}" BorderThickness="1" CornerRadius="5">
                       <StackPanel Spacing="4">
                         <Border Height="94" Background="{StaticResource TraftyBgDeepest}" CornerRadius="3">
                           <Image Source="{Binding Thumbnail}" Stretch="Uniform"
@@ -245,9 +246,10 @@
                 <Border x:Name="GuidePortraitRing" Grid.Column="0" Width="70" Height="70" CornerRadius="35"
                         Background="{StaticResource TraftyBgDeepest}" BorderBrush="{StaticResource TraftyGoldDim}"
                         BorderThickness="2" VerticalAlignment="Top">
-                  <TextBlock x:Name="GuideSigil" Text="A" FontSize="28" FontWeight="Bold"
-                             Foreground="{StaticResource TraftyGoldBright}"
-                             HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <Viewbox Width="34" Height="34" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Path x:Name="GuideSigil" Data="M12,2 L18,12 L12,22 L6,12 Z" Stretch="Uniform"
+                          Fill="{StaticResource TraftyGoldBright}" />
+                  </Viewbox>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="2">
                   <TextBlock x:Name="GuideName" Text="Aelwyn" FontSize="19" FontWeight="Bold"
@@ -396,8 +398,12 @@
     <Popup x:Name="AssetPreviewPopupSmall" Placement="Pointer" HorizontalOffset="16" VerticalOffset="16"
            IsLightDismissEnabled="False">
       <Border Background="{StaticResource TraftyBgDeepest}" BorderBrush="{StaticResource TraftyGold}"
-              BorderThickness="1" CornerRadius="4" Padding="4">
-        <Image x:Name="AssetPreviewImageSmall" Width="140" Height="140" Stretch="Uniform" />
+              BorderThickness="1" CornerRadius="4" Padding="8">
+        <Panel>
+          <Image x:Name="AssetPreviewImageSmall" Width="140" Height="140" Stretch="Uniform" />
+          <TextBlock x:Name="AssetPreviewMessageSmall" IsVisible="False" MaxWidth="200" TextWrapping="Wrap"
+                     Foreground="{StaticResource TraftyTextMuted}" FontSize="11" />
+        </Panel>
       </Border>
     </Popup>
 

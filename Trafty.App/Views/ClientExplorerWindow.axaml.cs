@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -33,26 +34,32 @@ public partial class ClientExplorerWindow : Window
             this.FindControl<Image>("AssetPreviewImageSmall")!,
             this.FindControl<Popup>("AssetPreviewPopupLarge")!,
             this.FindControl<Image>("AssetPreviewImageLarge")!,
-            this.FindControl<TextBlock>("AssetPreviewInfoLarge"));
+            this.FindControl<TextBlock>("AssetPreviewInfoLarge"),
+            smallMessage: this.FindControl<TextBlock>("AssetPreviewMessageSmall"));
     }
 
     /// <summary>
-    /// Right-click on an asset opens a small thumbnail preview near the cursor; hovering
-    /// over it (handled by <see cref="AssetPreviewPopupController"/>) swaps to a larger
-    /// popup. Reads and renders off the UI thread since archive-contained NIF/DDS entries
-    /// can be large.
+    /// Right-click on an asset opens a small preview popup near the cursor — a thumbnail for
+    /// a previewable format, or a short explanation otherwise. Hovering over a thumbnail
+    /// (handled by <see cref="AssetPreviewPopupController"/>) swaps to a larger popup. Reads
+    /// and renders off the UI thread since archive-contained NIF/DDS entries can be large.
+    /// Bound to the ListBox rather than each row's DataTemplate so it fires reliably no
+    /// matter which child control the click landed on.
     /// </summary>
     private async void OnAssetContextRequested(object? sender, ContextRequestedEventArgs e)
     {
-        if (sender is not Control { DataContext: ClientAssetRow row })
+        if (FindDataContext<ClientAssetRow>(e.Source as StyledElement) is not { } row)
         {
             return;
         }
 
         e.Handled = true;
+        _previewPopup.HideAll();
+        string extension = Path.GetExtension(row.Name);
 
-        if (!AssetPreviewRenderer.IsPreviewable(Path.GetExtension(row.Name)))
+        if (!AssetPreviewRenderer.IsPreviewable(extension))
         {
+            _previewPopup.ShowMessage($"\"{row.Name}\" has no visual preview — Trafty can only render .dds, .tga and .nif files.");
             return;
         }
 
@@ -61,7 +68,7 @@ public partial class ClientExplorerWindow : Window
             try
             {
                 byte[] bytes = ClientExplorerViewModel.ReadAssetBytes(row);
-                return AssetPreviewRenderer.TryRenderPng(bytes, Path.GetExtension(row.Name));
+                return AssetPreviewRenderer.TryRenderPng(bytes, extension);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or MpkFormatException)
             {
@@ -71,11 +78,27 @@ public partial class ClientExplorerWindow : Window
 
         if (png is null)
         {
+            _previewPopup.ShowMessage($"\"{row.Name}\" could not be rendered — the file may use a variant of the format Trafty doesn't support yet.");
             return;
         }
 
         using var stream = new MemoryStream(png, writable: false);
         _previewPopup.ShowSmall(new Bitmap(stream), row.Name);
+    }
+
+    private static T? FindDataContext<T>(StyledElement? element) where T : class
+    {
+        while (element is not null)
+        {
+            if (element.DataContext is T match)
+            {
+                return match;
+            }
+
+            element = element.Parent;
+        }
+
+        return null;
     }
 
     public ClientExplorerWindow(string rootPath) : this()
